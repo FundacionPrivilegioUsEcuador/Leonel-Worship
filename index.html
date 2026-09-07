@@ -34,7 +34,7 @@
                 height: 100vh !important;
                 overflow-y: auto !important;
                 border-radius: 0 !important;
-                padding: 20px 16px 80px !important;
+                padding: 20px 16px 0 !important;
             }
         }
 
@@ -77,33 +77,60 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 16px;
+            padding: 0;
+            margin: 0;
         }
 
         /* ===== CONTENEDOR PRINCIPAL ===== */
         .app-container {
-            max-width: 400px;
+            max-width: 420px;
             width: 100%;
+            height: 100vh;
+            max-height: 900px;
             background: #12121a;
-            border-radius: 32px;
-            padding: 20px 16px 80px;
+            border-radius: 0;
+            padding: 16px 16px 0;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
             border: 1px solid #2a2a35;
             position: relative;
-            min-height: 700px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Scroll personalizado */
+        .app-container::-webkit-scrollbar {
+            width: 3px;
+        }
+        .app-container::-webkit-scrollbar-track {
+            background: #1a1a26;
+        }
+        .app-container::-webkit-scrollbar-thumb {
+            background: #ffd700;
+            border-radius: 10px;
         }
 
         .app-container.hidden {
             display: none !important;
         }
 
-        /* ===== BARRA DE ESTADO ===== */
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            color: #666;
-            font-size: 12px;
-            padding-bottom: 12px;
+        /* ===== CONTENIDO SCROLLABLE ===== */
+        .app-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 10px;
+        }
+
+        .app-content::-webkit-scrollbar {
+            width: 3px;
+        }
+        .app-content::-webkit-scrollbar-track {
+            background: #1a1a26;
+        }
+        .app-content::-webkit-scrollbar-thumb {
+            background: #ffd700;
+            border-radius: 10px;
         }
 
         /* ===== SLIDER / BANNER ===== */
@@ -112,7 +139,7 @@
             width: 100%;
             border-radius: 16px;
             overflow: hidden;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             aspect-ratio: 16 / 7;
             background: #1a1a26;
         }
@@ -213,11 +240,12 @@
             border-radius: 4px;
         }
 
+        /* ===== PERFIL DEL ARTISTA ===== */
         .artist-header {
             display: flex;
             align-items: center;
             gap: 14px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .avatar {
@@ -255,11 +283,12 @@
             margin-top: 4px;
         }
 
+        /* ===== TARJETA DE SUSCRIPCIÓN ===== */
         .subscribe-card {
             background: linear-gradient(145deg, #1e1e2a, #28283a);
             border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 24px;
+            padding: 14px 16px;
+            margin-bottom: 18px;
             border: 1px solid #3a3a4e;
             display: flex;
             justify-content: space-between;
@@ -271,7 +300,7 @@
         }
 
         .subscribe-card .text .price {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
             color: #ffd700;
         }
@@ -291,7 +320,7 @@
         .btn-subscribe {
             background: #ffd700;
             border: none;
-            padding: 10px 22px;
+            padding: 10px 20px;
             border-radius: 30px;
             font-weight: 700;
             font-size: 14px;
@@ -310,42 +339,7 @@
             transform: scale(0.96);
         }
 
-        .tabs {
-            display: flex;
-            gap: 4px;
-            background: #1a1a26;
-            border-radius: 12px;
-            padding: 4px;
-            margin-bottom: 24px;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: transparent;
-            color: #888;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .tab-btn.active {
-            background: #ffd700;
-            color: #0a0a0f;
-            font-weight: 600;
-        }
-
-        .tab-btn:hover {
-            color: #fff;
-        }
-
-        .tab-btn.active:hover {
-            color: #0a0a0f;
-        }
-
+        /* ===== PÁGINAS ===== */
         .page {
             display: none;
             animation: fadeIn 0.3s ease;
@@ -366,11 +360,12 @@
             }
         }
 
+        /* ===== SECCIÓN TÍTULOS ===== */
         .section-title {
             color: #fff;
             font-size: 16px;
             font-weight: 600;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
         }
@@ -386,14 +381,15 @@
         .section-subtitle {
             color: #666;
             font-size: 13px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
+        /* ===== PÁGINA INICIO ===== */
         .song-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 28px;
+            gap: 8px;
+            margin-bottom: 22px;
         }
 
         .song-item {
@@ -448,8 +444,8 @@
         .course-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 28px;
+            gap: 10px;
+            margin-bottom: 22px;
         }
 
         .course-card {
@@ -493,7 +489,7 @@
             background: #1a1a26;
             border-radius: 12px;
             padding: 12px 14px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -518,6 +514,7 @@
             font-weight: 600;
         }
 
+        /* ===== PÁGINA MÚSICA ===== */
         .song-list-full .song-item {
             border-left-color: #555;
         }
@@ -550,11 +547,12 @@
             text-transform: uppercase;
         }
 
+        /* ===== PÁGINA CURSOS ===== */
         .course-list-full .course-item {
             background: #1a1a26;
             border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 14px;
@@ -621,46 +619,69 @@
             width: 0%;
         }
 
+        /* ============================================================ */
+        /* BARRA DE NAVEGACIÓN INFERIOR FIJA (STICKY) */
+        /* ============================================================ */
         .bottom-nav {
-            position: absolute;
+            position: sticky;
             bottom: 0;
             left: 0;
             right: 0;
             background: #0f0f18;
             border-top: 1px solid #1a1a26;
-            padding: 10px 20px 14px;
-            border-radius: 0 0 32px 32px;
+            padding: 8px 12px 12px;
+            margin: 0 -16px;
+            margin-top: 10px;
             display: flex;
             justify-content: space-around;
             align-items: center;
+            z-index: 100;
+            min-height: 60px;
+            flex-shrink: 0;
         }
 
         .nav-item {
-            color: #555;
-            font-size: 11px;
+            color: #666;
+            font-size: 12px;
             text-align: center;
             cursor: pointer;
             transition: 0.2s;
-            padding: 4px 12px;
-            border-radius: 8px;
+            padding: 6px 16px;
+            border-radius: 10px;
             background: transparent;
             border: none;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            flex: 1;
+        }
+
+        .nav-item .nav-icon {
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .nav-item .label {
+            font-size: 10px;
+            letter-spacing: 0.3px;
         }
 
         .nav-item.active {
             color: #ffd700;
-            font-weight: 500;
+            font-weight: 600;
+        }
+
+        .nav-item.active .nav-icon {
+            color: #ffd700;
         }
 
         .nav-item:hover {
             color: #fff;
         }
 
-        .nav-item .label {
-            display: block;
-            margin-top: 2px;
-        }
-
+        /* ===== POPUP DE REGISTRO / LOGIN ===== */
         .overlay {
             display: none;
             position: fixed;
@@ -668,7 +689,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -688,6 +709,8 @@
             border: 1px solid #2a2a35;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .popup .close-btn {
@@ -697,7 +720,7 @@
             background: none;
             border: none;
             color: #666;
-            font-size: 22px;
+            font-size: 24px;
             cursor: pointer;
             transition: 0.2s;
         }
@@ -708,9 +731,9 @@
 
         .popup h2 {
             color: #fff;
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 6px;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
         }
 
         .popup .subtitle {
@@ -838,24 +861,53 @@
             text-decoration: underline;
         }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 420px) {
             .app-container {
-                padding: 16px 12px 70px;
-                border-radius: 24px;
+                padding: 12px 12px 0;
+                max-height: none;
+                height: 100vh;
+                border-radius: 0;
             }
             .bottom-nav {
-                padding: 8px 12px 12px;
-                border-radius: 0 0 24px 24px;
+                padding: 6px 8px 10px;
+                min-height: 54px;
+                margin: 0 -12px;
+                margin-top: 8px;
             }
             .nav-item {
-                font-size: 10px;
                 padding: 4px 8px;
+                font-size: 10px;
+            }
+            .nav-item .nav-icon {
+                font-size: 20px;
             }
             .popup {
                 padding: 24px 18px;
             }
             .slider-slide .slide-content h2 {
                 font-size: 22px;
+            }
+            .subscribe-card .text .price {
+                font-size: 20px;
+            }
+            .btn-subscribe {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .app-container {
+                border-radius: 32px;
+                height: 90vh;
+                max-height: 850px;
+                padding: 20px 20px 0;
+            }
+            .bottom-nav {
+                border-radius: 0 0 32px 32px;
+                margin: 0 -20px;
+                margin-top: 12px;
             }
         }
     </style>
@@ -866,325 +918,338 @@
     <!-- APP PRINCIPAL -->
     <!-- ============================================================ -->
     <div class="app-container" id="appContainer">
-        <!-- BARRA DE ESTADO -->
-        <div class="status-bar">
-            <span>5G</span>
-            <span>9:41</span>
-            <span>87%</span>
-        </div>
 
-        <!-- SLIDER / BANNER -->
-        <div class="slider-container" id="sliderContainer">
-            <div class="slider-track" id="sliderTrack">
-                <div class="slider-slide slide-1">
-                    <div class="slide-bg"></div>
-                    <div class="slide-content">
-                        <h2>Leonel Worship</h2>
-                        <p>Nuevo album disponible</p>
+        <!-- ===== CONTENIDO SCROLLABLE ===== -->
+        <div class="app-content">
+
+            <!-- SLIDER / BANNER -->
+            <div class="slider-container" id="sliderContainer">
+                <div class="slider-track" id="sliderTrack">
+                    <div class="slider-slide slide-1">
+                        <div class="slide-bg"></div>
+                        <div class="slide-content">
+                            <h2>Leonel Worship</h2>
+                            <p>Nuevo album disponible</p>
+                        </div>
+                    </div>
+                    <div class="slider-slide slide-2">
+                        <div class="slide-bg"></div>
+                        <div class="slide-content">
+                            <h2>Leonel Worship</h2>
+                            <p>Proximos conciertos 2026</p>
+                        </div>
                     </div>
                 </div>
-                <div class="slider-slide slide-2">
-                    <div class="slide-bg"></div>
-                    <div class="slide-content">
-                        <h2>Leonel Worship</h2>
-                        <p>Proximos conciertos 2026</p>
-                    </div>
+            </div>
+
+            <!-- INDICADORES DEL SLIDER -->
+            <div class="slider-dots" id="sliderDots">
+                <button class="dot active" data-index="0"></button>
+                <button class="dot" data-index="1"></button>
+            </div>
+
+            <!-- PERFIL DEL ARTISTA -->
+            <div class="artist-header">
+                <div class="avatar">LW</div>
+                <div class="artist-info">
+                    <h2>Leonel Worship</h2>
+                    <p>25K seguidores</p>
+                    <span class="badge-pro">PRO</span>
                 </div>
             </div>
-        </div>
 
-        <div class="slider-dots" id="sliderDots">
-            <button class="dot active" data-index="0"></button>
-            <button class="dot" data-index="1"></button>
-        </div>
-
-        <div class="artist-header">
-            <div class="avatar">LW</div>
-            <div class="artist-info">
-                <h2>Leonel Worship</h2>
-                <p>25K seguidores</p>
-                <span class="badge-pro">PRO</span>
-            </div>
-        </div>
-
-        <div class="subscribe-card">
-            <div class="text">
-                <div class="price">$3 <span>/ mes</span></div>
-                <small>Acceso a toda la musica + cursos</small>
-            </div>
-            <button class="btn-subscribe" id="btnSubscribe">Suscribirme</button>
-        </div>
-
-        <div class="tabs">
-            <button class="tab-btn active" data-page="inicio">Inicio</button>
-            <button class="tab-btn" data-page="musica">Musica</button>
-            <button class="tab-btn" data-page="cursos">Cursos</button>
-        </div>
-
-        <div id="page-inicio" class="page active">
-            <div class="section-title">
-                <span>Ultimos lanzamientos</span>
-                <a onclick="navigateTo('musica'); return false;">Ver todos</a>
+            <!-- TARJETA DE SUSCRIPCIÓN -->
+            <div class="subscribe-card">
+                <div class="text">
+                    <div class="price">$3 <span>/ mes</span></div>
+                    <small>Acceso a toda la musica + cursos</small>
+                </div>
+                <button class="btn-subscribe" id="btnSubscribe">Suscribirme</button>
             </div>
 
-            <div class="song-list">
-                <div class="song-item">
-                    <div class="cover">🎸</div>
+            <!-- ============================================================ -->
+            <!-- PÁGINA: INICIO -->
+            <!-- ============================================================ -->
+            <div id="page-inicio" class="page active">
+                <div class="section-title">
+                    <span>Ultimos lanzamientos</span>
+                    <a onclick="navigateTo('musica'); return false;">Ver todos</a>
+                </div>
+
+                <div class="song-list">
+                    <div class="song-item">
+                        <div class="cover">🎸</div>
+                        <div class="info">
+                            <h4>Noche de Rock</h4>
+                            <p>Leonel Worship · 2026</p>
+                        </div>
+                        <span class="icon-play">▶</span>
+                    </div>
+                    <div class="song-item">
+                        <div class="cover">🎹</div>
+                        <div class="info">
+                            <h4>Balada para el alma</h4>
+                            <p>Leonel Worship · 2026</p>
+                        </div>
+                        <span class="icon-play">▶</span>
+                    </div>
+                    <div class="song-item" style="border-left-color: #888;">
+                        <div class="cover">🎤</div>
+                        <div class="info">
+                            <h4>Acustico en vivo</h4>
+                            <p>Leonel Worship · 2025</p>
+                        </div>
+                        <span class="icon-play">▶</span>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    <span>Cursos</span>
+                    <a onclick="navigateTo('cursos'); return false;">Ver todos</a>
+                </div>
+
+                <div class="course-grid">
+                    <div class="course-card">
+                        <div class="icon">🎸</div>
+                        <h5>Guitarra</h5>
+                        <p>12 lecciones</p>
+                        <div class="lock">🔒</div>
+                    </div>
+                    <div class="course-card">
+                        <div class="icon">🥁</div>
+                        <h5>Bateria</h5>
+                        <p>8 lecciones</p>
+                        <div class="lock">🔒</div>
+                    </div>
+                    <div class="course-card">
+                        <div class="icon">🎹</div>
+                        <h5>Piano</h5>
+                        <p>10 lecciones</p>
+                        <div class="lock">🔒</div>
+                    </div>
+                    <div class="course-card">
+                        <div class="icon">🎤</div>
+                        <h5>Voz</h5>
+                        <p>6 lecciones</p>
+                        <div class="lock">🔒</div>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    <span>Proximos conciertos</span>
+                </div>
+
+                <div class="concert-item">
                     <div class="info">
-                        <h4>Noche de Rock</h4>
-                        <p>Leonel Worship · 2026</p>
+                        <h4>Festival de Rock</h4>
+                        <p>Madrid, Espana</p>
                     </div>
-                    <span class="icon-play">▶</span>
+                    <span class="date">15 May</span>
                 </div>
-                <div class="song-item">
-                    <div class="cover">🎹</div>
+
+                <div class="concert-item">
                     <div class="info">
-                        <h4>Balada para el alma</h4>
-                        <p>Leonel Worship · 2026</p>
+                        <h4>Noche de Jazz</h4>
+                        <p>Barcelona, Espana</p>
                     </div>
-                    <span class="icon-play">▶</span>
-                </div>
-                <div class="song-item" style="border-left-color: #888;">
-                    <div class="cover">🎤</div>
-                    <div class="info">
-                        <h4>Acustico en vivo</h4>
-                        <p>Leonel Worship · 2025</p>
-                    </div>
-                    <span class="icon-play">▶</span>
+                    <span class="date">28 Jun</span>
                 </div>
             </div>
 
-            <div class="section-title">
-                <span>Cursos</span>
-                <a onclick="navigateTo('cursos'); return false;">Ver todos</a>
-            </div>
+            <!-- ============================================================ -->
+            <!-- PÁGINA: MÚSICA -->
+            <!-- ============================================================ -->
+            <div id="page-musica" class="page">
+                <div class="section-title">Todas las canciones</div>
+                <div class="section-subtitle">Discografia completa de Leonel Worship</div>
 
-            <div class="course-grid">
-                <div class="course-card">
-                    <div class="icon">🎸</div>
-                    <h5>Guitarra</h5>
-                    <p>12 lecciones</p>
-                    <div class="lock">🔒</div>
-                </div>
-                <div class="course-card">
-                    <div class="icon">🥁</div>
-                    <h5>Bateria</h5>
-                    <p>8 lecciones</p>
-                    <div class="lock">🔒</div>
-                </div>
-                <div class="course-card">
-                    <div class="icon">🎹</div>
-                    <h5>Piano</h5>
-                    <p>10 lecciones</p>
-                    <div class="lock">🔒</div>
-                </div>
-                <div class="course-card">
-                    <div class="icon">🎤</div>
-                    <h5>Voz</h5>
-                    <p>6 lecciones</p>
-                    <div class="lock">🔒</div>
-                </div>
-            </div>
-
-            <div class="section-title">
-                <span>Proximos conciertos</span>
-            </div>
-
-            <div class="concert-item">
-                <div class="info">
-                    <h4>Festival de Rock</h4>
-                    <p>Madrid, Espana</p>
-                </div>
-                <span class="date">15 May</span>
-            </div>
-
-            <div class="concert-item">
-                <div class="info">
-                    <h4>Noche de Jazz</h4>
-                    <p>Barcelona, Espana</p>
-                </div>
-                <span class="date">28 Jun</span>
-            </div>
-        </div>
-
-        <div id="page-musica" class="page">
-            <div class="section-title">Todas las canciones</div>
-            <div class="section-subtitle">Discografia completa de Leonel Worship</div>
-
-            <div class="song-list-full">
-                <div class="song-item featured">
-                    <span class="song-number">01</span>
-                    <div class="info">
-                        <h4>Noche de Rock <span class="badge-new">Nuevo</span></h4>
-                        <p>Leonel Worship · 2026</p>
+                <div class="song-list-full">
+                    <div class="song-item featured">
+                        <span class="song-number">01</span>
+                        <div class="info">
+                            <h4>Noche de Rock <span class="badge-new">Nuevo</span></h4>
+                            <p>Leonel Worship · 2026</p>
+                        </div>
+                        <span class="duration">3:24</span>
                     </div>
-                    <span class="duration">3:24</span>
+
+                    <div class="song-item">
+                        <span class="song-number">02</span>
+                        <div class="info">
+                            <h4>Balada para el alma</h4>
+                            <p>Leonel Worship · 2026</p>
+                        </div>
+                        <span class="duration">4:12</span>
+                    </div>
+
+                    <div class="song-item">
+                        <span class="song-number">03</span>
+                        <div class="info">
+                            <h4>Acustico en vivo</h4>
+                            <p>Leonel Worship · 2025</p>
+                        </div>
+                        <span class="duration">5:08</span>
+                    </div>
+
+                    <div class="song-item">
+                        <span class="song-number">04</span>
+                        <div class="info">
+                            <h4>Fuego y Pasion</h4>
+                            <p>Leonel Worship · 2025</p>
+                        </div>
+                        <span class="duration">3:56</span>
+                    </div>
+
+                    <div class="song-item">
+                        <span class="song-number">05</span>
+                        <div class="info">
+                            <h4>Atardecer</h4>
+                            <p>Leonel Worship · 2025</p>
+                        </div>
+                        <span class="duration">4:45</span>
+                    </div>
+
+                    <div class="song-item">
+                        <span class="song-number">06</span>
+                        <div class="info">
+                            <h4>Sin mirar atras</h4>
+                            <p>Leonel Worship · 2025</p>
+                        </div>
+                        <span class="duration">3:38</span>
+                    </div>
+
+                    <div class="song-item">
+                        <span class="song-number">07</span>
+                        <div class="info">
+                            <h4>Luces de ciudad</h4>
+                            <p>Leonel Worship · 2024</p>
+                        </div>
+                        <span class="duration">4:02</span>
+                    </div>
+
+                    <div class="song-item">
+                        <span class="song-number">08</span>
+                        <div class="info">
+                            <h4>Despertar</h4>
+                            <p>Leonel Worship · 2024</p>
+                        </div>
+                        <span class="duration">3:50</span>
+                    </div>
                 </div>
 
-                <div class="song-item">
-                    <span class="song-number">02</span>
-                    <div class="info">
-                        <h4>Balada para el alma</h4>
-                        <p>Leonel Worship · 2026</p>
-                    </div>
-                    <span class="duration">4:12</span>
-                </div>
-
-                <div class="song-item">
-                    <span class="song-number">03</span>
-                    <div class="info">
-                        <h4>Acustico en vivo</h4>
-                        <p>Leonel Worship · 2025</p>
-                    </div>
-                    <span class="duration">5:08</span>
-                </div>
-
-                <div class="song-item">
-                    <span class="song-number">04</span>
-                    <div class="info">
-                        <h4>Fuego y Pasion</h4>
-                        <p>Leonel Worship · 2025</p>
-                    </div>
-                    <span class="duration">3:56</span>
-                </div>
-
-                <div class="song-item">
-                    <span class="song-number">05</span>
-                    <div class="info">
-                        <h4>Atardecer</h4>
-                        <p>Leonel Worship · 2025</p>
-                    </div>
-                    <span class="duration">4:45</span>
-                </div>
-
-                <div class="song-item">
-                    <span class="song-number">06</span>
-                    <div class="info">
-                        <h4>Sin mirar atras</h4>
-                        <p>Leonel Worship · 2025</p>
-                    </div>
-                    <span class="duration">3:38</span>
-                </div>
-
-                <div class="song-item">
-                    <span class="song-number">07</span>
-                    <div class="info">
-                        <h4>Luces de ciudad</h4>
-                        <p>Leonel Worship · 2024</p>
-                    </div>
-                    <span class="duration">4:02</span>
-                </div>
-
-                <div class="song-item">
-                    <span class="song-number">08</span>
-                    <div class="info">
-                        <h4>Despertar</h4>
-                        <p>Leonel Worship · 2024</p>
-                    </div>
-                    <span class="duration">3:50</span>
+                <div style="margin-top: 16px; padding: 12px; background: #1a1a26; border-radius: 10px; text-align: center;">
+                    <span style="color: #666; font-size: 13px;">45 canciones disponibles</span>
                 </div>
             </div>
 
-            <div style="margin-top: 16px; padding: 12px; background: #1a1a26; border-radius: 10px; text-align: center;">
-                <span style="color: #666; font-size: 13px;">45 canciones disponibles</span>
+            <!-- ============================================================ -->
+            <!-- PÁGINA: CURSOS -->
+            <!-- ============================================================ -->
+            <div id="page-cursos" class="page">
+                <div class="section-title">Todos los cursos</div>
+                <div class="section-subtitle">Aprende con Leonel Worship</div>
+
+                <div class="course-list-full">
+                    <div class="course-item">
+                        <div class="course-icon">🎸</div>
+                        <div class="course-info">
+                            <h4>Guitarra para principiantes</h4>
+                            <p>12 lecciones · Nivel 1</p>
+                            <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
+                        </div>
+                        <span class="course-status locked">🔒</span>
+                    </div>
+
+                    <div class="course-item">
+                        <div class="course-icon">🥁</div>
+                        <div class="course-info">
+                            <h4>Bateria: ritmos esenciales</h4>
+                            <p>8 lecciones · Nivel 1</p>
+                            <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
+                        </div>
+                        <span class="course-status locked">🔒</span>
+                    </div>
+
+                    <div class="course-item">
+                        <div class="course-icon">🎹</div>
+                        <div class="course-info">
+                            <h4>Piano: acordes y melodias</h4>
+                            <p>10 lecciones · Nivel 1</p>
+                            <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
+                        </div>
+                        <span class="course-status locked">🔒</span>
+                    </div>
+
+                    <div class="course-item">
+                        <div class="course-icon">🎤</div>
+                        <div class="course-info">
+                            <h4>Tecnica vocal avanzada</h4>
+                            <p>6 lecciones · Nivel 2</p>
+                            <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
+                        </div>
+                        <span class="course-status locked">🔒</span>
+                    </div>
+
+                    <div class="course-item" style="border: 1px solid #2a2a40; background: #1f1f2e;">
+                        <div class="course-icon">🎵</div>
+                        <div class="course-info">
+                            <h4>Composicion musical</h4>
+                            <p>14 lecciones · Nivel 2</p>
+                            <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
+                        </div>
+                        <span class="course-status locked">🔒</span>
+                    </div>
+
+                    <div class="course-item" style="border: 1px solid #2a2a40; background: #1f1f2e;">
+                        <div class="course-icon">🎧</div>
+                        <div class="course-info">
+                            <h4>Produccion musical</h4>
+                            <p>10 lecciones · Nivel 2</p>
+                            <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
+                        </div>
+                        <span class="course-status locked">🔒</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 16px; padding: 14px; background: #1a1a26; border-radius: 10px; text-align: center; border: 1px dashed #2a2a40;">
+                    <span style="color: #ffd700; font-size: 14px; font-weight: 500;">Suscribete por $3/mes</span>
+                    <span style="color: #666; font-size: 12px; display: block; margin-top: 4px;">Desbloquea todos los cursos</span>
+                </div>
             </div>
-        </div>
 
-        <div id="page-cursos" class="page">
-            <div class="section-title">Todos los cursos</div>
-            <div class="section-subtitle">Aprende con Leonel Worship</div>
+        </div><!-- fin app-content -->
 
-            <div class="course-list-full">
-                <div class="course-item">
-                    <div class="course-icon">🎸</div>
-                    <div class="course-info">
-                        <h4>Guitarra para principiantes</h4>
-                        <p>12 lecciones · Nivel 1</p>
-                        <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
-                    </div>
-                    <span class="course-status locked">🔒</span>
-                </div>
-
-                <div class="course-item">
-                    <div class="course-icon">🥁</div>
-                    <div class="course-info">
-                        <h4>Bateria: ritmos esenciales</h4>
-                        <p>8 lecciones · Nivel 1</p>
-                        <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
-                    </div>
-                    <span class="course-status locked">🔒</span>
-                </div>
-
-                <div class="course-item">
-                    <div class="course-icon">🎹</div>
-                    <div class="course-info">
-                        <h4>Piano: acordes y melodias</h4>
-                        <p>10 lecciones · Nivel 1</p>
-                        <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
-                    </div>
-                    <span class="course-status locked">🔒</span>
-                </div>
-
-                <div class="course-item">
-                    <div class="course-icon">🎤</div>
-                    <div class="course-info">
-                        <h4>Tecnica vocal avanzada</h4>
-                        <p>6 lecciones · Nivel 2</p>
-                        <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
-                    </div>
-                    <span class="course-status locked">🔒</span>
-                </div>
-
-                <div class="course-item" style="border: 1px solid #2a2a40; background: #1f1f2e;">
-                    <div class="course-icon">🎵</div>
-                    <div class="course-info">
-                        <h4>Composicion musical</h4>
-                        <p>14 lecciones · Nivel 2</p>
-                        <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
-                    </div>
-                    <span class="course-status locked">🔒</span>
-                </div>
-
-                <div class="course-item" style="border: 1px solid #2a2a40; background: #1f1f2e;">
-                    <div class="course-icon">🎧</div>
-                    <div class="course-info">
-                        <h4>Produccion musical</h4>
-                        <p>10 lecciones · Nivel 2</p>
-                        <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
-                    </div>
-                    <span class="course-status locked">🔒</span>
-                </div>
-            </div>
-
-            <div style="margin-top: 16px; padding: 14px; background: #1a1a26; border-radius: 10px; text-align: center; border: 1px dashed #2a2a40;">
-                <span style="color: #ffd700; font-size: 14px; font-weight: 500;">Suscribete por $3/mes</span>
-                <span style="color: #666; font-size: 12px; display: block; margin-top: 4px;">Desbloquea todos los cursos</span>
-            </div>
-        </div>
-
+        <!-- ============================================================ -->
+        <!-- BARRA DE NAVEGACIÓN INFERIOR FIJA (STICKY) -->
+        <!-- ============================================================ -->
         <div class="bottom-nav">
             <button class="nav-item active" data-page="inicio">
+                <span class="nav-icon">🏠</span>
                 <span class="label">Inicio</span>
             </button>
             <button class="nav-item" data-page="musica">
+                <span class="nav-icon">🎵</span>
                 <span class="label">Musica</span>
             </button>
             <button class="nav-item" data-page="cursos">
+                <span class="nav-icon">📚</span>
                 <span class="label">Cursos</span>
             </button>
         </div>
-    </div>
+
+    </div><!-- fin app-container -->
 
     <!-- ============================================================ -->
-    <!-- POPUP DE REGISTRO -->
+    <!-- POPUP DE REGISTRO / LOGIN -->
     <!-- ============================================================ -->
     <div class="overlay" id="registerOverlay">
         <div class="popup">
             <button class="close-btn" id="closePopup">✕</button>
 
             <h2>Bienvenido</h2>
-            <p class="subtitle">Registrate para acceder a toda la musica y cursos</p>
+            <p class="subtitle">Registrate o inicia sesion para acceder a todo el contenido</p>
 
+            <!-- Formulario de Registro -->
             <div id="form-register">
                 <div class="form-group">
                     <label>Nombre completo</label>
@@ -1209,6 +1274,7 @@
                 </div>
             </div>
 
+            <!-- Formulario de Login -->
             <div id="form-login" style="display: none;">
                 <div class="form-group">
                     <label>Correo electronico</label>
@@ -1253,14 +1319,12 @@
             }
         }
 
-        // Revisar al cargar y al cambiar orientación
         window.addEventListener('load', checkOrientation);
         window.addEventListener('resize', checkOrientation);
         window.addEventListener('orientationchange', function() {
             setTimeout(checkOrientation, 300);
         });
 
-        // Intentar forzar vertical con Screen Orientation API
         if (screen.orientation && screen.orientation.lock) {
             screen.orientation.lock('portrait').catch(function(err) {
                 console.log('No se pudo bloquear orientación:', err);
@@ -1325,16 +1389,12 @@
                 targetPage.classList.add('active');
             }
 
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.page === pageId);
-            });
-
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.page === pageId);
             });
         }
 
-        document.querySelectorAll('.tab-btn, .nav-item').forEach(btn => {
+        document.querySelectorAll('.nav-item').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 const page = this.dataset.page;
                 if (page) {
@@ -1344,7 +1404,7 @@
         });
 
         // ========================================
-        // 4. POPUP DE REGISTRO
+        // 4. POPUP DE REGISTRO / LOGIN
         // ========================================
 
         const overlay = document.getElementById('registerOverlay');
