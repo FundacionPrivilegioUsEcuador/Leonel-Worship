@@ -2,8 +2,15 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    
+    <!-- ===== META TAGS PARA ORIENTACIÓN VERTICAL ===== -->
+    <meta name="screen-orientation" content="portrait" />
+    <meta name="x5-orientation" content="portrait" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    
     <title>Leonel Worship - App</title>
+    
     <style>
         /* ===== RESET Y ESTILOS GLOBALES ===== */
         * {
@@ -11,6 +18,57 @@
             padding: 0;
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* ===== FORZAR ORIENTACIÓN VERTICAL ===== */
+        @media screen and (orientation: landscape) {
+            body {
+                transform: rotate(0deg) !important;
+                overflow: hidden !important;
+                background: #0a0a0f !important;
+            }
+            
+            .app-container {
+                max-width: 400px !important;
+                margin: 0 auto !important;
+                height: 100vh !important;
+                overflow-y: auto !important;
+                border-radius: 0 !important;
+                padding: 20px 16px 80px !important;
+            }
+        }
+
+        /* ===== BLOQUEAR ROTACIÓN EN PANTALLAS PEQUEÑAS ===== */
+        @media (max-width: 768px) and (orientation: landscape) {
+            body::before {
+                content: "🔄 Por favor, gira tu dispositivo a vertical";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #0a0a0f;
+                color: #ffd700;
+                font-size: 20px;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 40px;
+                z-index: 9999;
+                flex-direction: column;
+            }
+            
+            body::after {
+                content: "📱";
+                font-size: 60px;
+                margin-bottom: 20px;
+            }
+            
+            .app-container {
+                display: none !important;
+            }
         }
 
         body {
@@ -33,6 +91,10 @@
             border: 1px solid #2a2a35;
             position: relative;
             min-height: 700px;
+        }
+
+        .app-container.hidden {
+            display: none !important;
         }
 
         /* ===== BARRA DE ESTADO ===== */
@@ -99,7 +161,6 @@
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
         }
 
-        /* Slide 1 - Fondo dorado con textura */
         .slide-1 .slide-bg {
             background: linear-gradient(135deg, #f7971e, #ffd700);
         }
@@ -111,7 +172,6 @@
             opacity: 0.8;
         }
 
-        /* Slide 2 - Fondo oscuro con acento dorado */
         .slide-2 .slide-bg {
             background: linear-gradient(135deg, #1a1a2e, #16213e);
         }
@@ -128,7 +188,6 @@
             color: #ccc;
         }
 
-        /* ===== INDICADORES DEL SLIDER ===== */
         .slider-dots {
             display: flex;
             justify-content: center;
@@ -154,7 +213,6 @@
             border-radius: 4px;
         }
 
-        /* ===== PERFIL DEL ARTISTA ===== */
         .artist-header {
             display: flex;
             align-items: center;
@@ -197,7 +255,6 @@
             margin-top: 4px;
         }
 
-        /* ===== TARJETA DE SUSCRIPCIÓN ===== */
         .subscribe-card {
             background: linear-gradient(145deg, #1e1e2a, #28283a);
             border-radius: 16px;
@@ -253,7 +310,6 @@
             transform: scale(0.96);
         }
 
-        /* ===== NAVEGACIÓN SUPERIOR ===== */
         .tabs {
             display: flex;
             gap: 4px;
@@ -290,7 +346,6 @@
             color: #0a0a0f;
         }
 
-        /* ===== PÁGINAS ===== */
         .page {
             display: none;
             animation: fadeIn 0.3s ease;
@@ -311,7 +366,6 @@
             }
         }
 
-        /* ===== SECCIÓN TÍTULOS ===== */
         .section-title {
             color: #fff;
             font-size: 16px;
@@ -335,7 +389,6 @@
             margin-bottom: 16px;
         }
 
-        /* ===== PÁGINA INICIO ===== */
         .song-list {
             display: flex;
             flex-direction: column;
@@ -465,7 +518,6 @@
             font-weight: 600;
         }
 
-        /* ===== PÁGINA MÚSICA ===== */
         .song-list-full .song-item {
             border-left-color: #555;
         }
@@ -498,7 +550,6 @@
             text-transform: uppercase;
         }
 
-        /* ===== PÁGINA CURSOS ===== */
         .course-list-full .course-item {
             background: #1a1a26;
             border-radius: 12px;
@@ -570,7 +621,6 @@
             width: 0%;
         }
 
-        /* ===== MENÚ INFERIOR ===== */
         .bottom-nav {
             position: absolute;
             bottom: 0;
@@ -611,7 +661,6 @@
             margin-top: 2px;
         }
 
-        /* ===== POPUP DE REGISTRO ===== */
         .overlay {
             display: none;
             position: fixed;
@@ -789,7 +838,6 @@
             text-decoration: underline;
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 420px) {
             .app-container {
                 padding: 16px 12px 70px;
@@ -817,7 +865,7 @@
     <!-- ============================================================ -->
     <!-- APP PRINCIPAL -->
     <!-- ============================================================ -->
-    <div class="app-container">
+    <div class="app-container" id="appContainer">
         <!-- BARRA DE ESTADO -->
         <div class="status-bar">
             <span>5G</span>
@@ -825,12 +873,9 @@
             <span>87%</span>
         </div>
 
-        <!-- ============================================================ -->
         <!-- SLIDER / BANNER -->
-        <!-- ============================================================ -->
         <div class="slider-container" id="sliderContainer">
             <div class="slider-track" id="sliderTrack">
-                <!-- Slide 1 -->
                 <div class="slider-slide slide-1">
                     <div class="slide-bg"></div>
                     <div class="slide-content">
@@ -838,7 +883,6 @@
                         <p>Nuevo album disponible</p>
                     </div>
                 </div>
-                <!-- Slide 2 -->
                 <div class="slider-slide slide-2">
                     <div class="slide-bg"></div>
                     <div class="slide-content">
@@ -849,13 +893,11 @@
             </div>
         </div>
 
-        <!-- INDICADORES -->
         <div class="slider-dots" id="sliderDots">
             <button class="dot active" data-index="0"></button>
             <button class="dot" data-index="1"></button>
         </div>
 
-        <!-- PERFIL DEL ARTISTA -->
         <div class="artist-header">
             <div class="avatar">LW</div>
             <div class="artist-info">
@@ -865,7 +907,6 @@
             </div>
         </div>
 
-        <!-- TARJETA DE SUSCRIPCIÓN -->
         <div class="subscribe-card">
             <div class="text">
                 <div class="price">$3 <span>/ mes</span></div>
@@ -874,16 +915,12 @@
             <button class="btn-subscribe" id="btnSubscribe">Suscribirme</button>
         </div>
 
-        <!-- TABS SUPERIORES -->
         <div class="tabs">
             <button class="tab-btn active" data-page="inicio">Inicio</button>
             <button class="tab-btn" data-page="musica">Musica</button>
             <button class="tab-btn" data-page="cursos">Cursos</button>
         </div>
 
-        <!-- ============================================================ -->
-        <!-- PÁGINA: INICIO -->
-        <!-- ============================================================ -->
         <div id="page-inicio" class="page active">
             <div class="section-title">
                 <span>Ultimos lanzamientos</span>
@@ -970,9 +1007,6 @@
             </div>
         </div>
 
-        <!-- ============================================================ -->
-        <!-- PÁGINA: MÚSICA -->
-        <!-- ============================================================ -->
         <div id="page-musica" class="page">
             <div class="section-title">Todas las canciones</div>
             <div class="section-subtitle">Discografia completa de Leonel Worship</div>
@@ -1056,9 +1090,6 @@
             </div>
         </div>
 
-        <!-- ============================================================ -->
-        <!-- PÁGINA: CURSOS -->
-        <!-- ============================================================ -->
         <div id="page-cursos" class="page">
             <div class="section-title">Todos los cursos</div>
             <div class="section-subtitle">Aprende con Leonel Worship</div>
@@ -1131,9 +1162,6 @@
             </div>
         </div>
 
-        <!-- ============================================================ -->
-        <!-- MENÚ INFERIOR -->
-        <!-- ============================================================ -->
         <div class="bottom-nav">
             <button class="nav-item active" data-page="inicio">
                 <span class="label">Inicio</span>
@@ -1157,7 +1185,6 @@
             <h2>Bienvenido</h2>
             <p class="subtitle">Registrate para acceder a toda la musica y cursos</p>
 
-            <!-- Formulario de Registro -->
             <div id="form-register">
                 <div class="form-group">
                     <label>Nombre completo</label>
@@ -1182,7 +1209,6 @@
                 </div>
             </div>
 
-            <!-- Formulario de Login (oculto) -->
             <div id="form-login" style="display: none;">
                 <div class="form-group">
                     <label>Correo electronico</label>
@@ -1210,7 +1236,39 @@
     <!-- ============================================================ -->
     <script>
         // ========================================
-        // 1. SLIDER AUTOMÁTICO
+        // 1. FORZAR ORIENTACIÓN VERTICAL
+        // ========================================
+
+        function checkOrientation() {
+            const isMobile = window.innerWidth < 768;
+            const isLandscape = window.innerWidth > window.innerHeight;
+            const container = document.getElementById('appContainer');
+            
+            if (isMobile && isLandscape) {
+                document.body.style.overflow = 'hidden';
+                if (container) container.classList.add('hidden');
+            } else {
+                document.body.style.overflow = 'auto';
+                if (container) container.classList.remove('hidden');
+            }
+        }
+
+        // Revisar al cargar y al cambiar orientación
+        window.addEventListener('load', checkOrientation);
+        window.addEventListener('resize', checkOrientation);
+        window.addEventListener('orientationchange', function() {
+            setTimeout(checkOrientation, 300);
+        });
+
+        // Intentar forzar vertical con Screen Orientation API
+        if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock('portrait').catch(function(err) {
+                console.log('No se pudo bloquear orientación:', err);
+            });
+        }
+
+        // ========================================
+        // 2. SLIDER AUTOMÁTICO
         // ========================================
 
         let currentSlide = 0;
@@ -1225,7 +1283,6 @@
             currentSlide = index;
             sliderTrack.style.transform = 'translateX(-' + (index * 100) + '%)';
 
-            // Actualizar dots
             dots.forEach((dot, i) => {
                 dot.classList.toggle('active', i === index);
             });
@@ -1235,7 +1292,6 @@
             goToSlide(currentSlide + 1);
         }
 
-        // Click en dots
         dots.forEach(dot => {
             dot.addEventListener('click', function() {
                 const index = parseInt(this.dataset.index);
@@ -1244,7 +1300,6 @@
             });
         });
 
-        // Auto-slide cada 4 segundos
         function startAutoSlide() {
             autoSlideInterval = setInterval(nextSlide, 4000);
         }
@@ -1254,11 +1309,10 @@
             startAutoSlide();
         }
 
-        // Iniciar slider
         startAutoSlide();
 
         // ========================================
-        // 2. NAVEGACIÓN ENTRE PÁGINAS
+        // 3. NAVEGACIÓN ENTRE PÁGINAS
         // ========================================
 
         function navigateTo(pageId) {
@@ -1290,7 +1344,7 @@
         });
 
         // ========================================
-        // 3. POPUP DE REGISTRO
+        // 4. POPUP DE REGISTRO
         // ========================================
 
         const overlay = document.getElementById('registerOverlay');
@@ -1314,7 +1368,7 @@
         });
 
         // ========================================
-        // 4. REGISTRO / LOGIN - SWITCH
+        // 5. REGISTRO / LOGIN - SWITCH
         // ========================================
 
         const formRegister = document.getElementById('form-register');
@@ -1335,7 +1389,7 @@
         });
 
         // ========================================
-        // 5. ACCIONES DE REGISTRO Y LOGIN
+        // 6. ACCIONES DE REGISTRO Y LOGIN
         // ========================================
 
         document.getElementById('btnRegister').addEventListener('click', function() {
@@ -1384,7 +1438,7 @@
         });
 
         // ========================================
-        // 6. ACTUALIZAR INTERFAZ CON USUARIO
+        // 7. ACTUALIZAR INTERFAZ CON USUARIO
         // ========================================
 
         function actualizarUsuario(nombre) {
@@ -1400,7 +1454,7 @@
         }
 
         // ========================================
-        // 7. INTERACCIÓN: CANCIONES
+        // 8. INTERACCIÓN: CANCIONES
         // ========================================
 
         document.querySelectorAll('.song-item').forEach((item) => {
@@ -1412,7 +1466,7 @@
         });
 
         // ========================================
-        // 8. INTERACCIÓN: CURSOS
+        // 9. INTERACCIÓN: CURSOS
         // ========================================
 
         document.querySelectorAll('.course-card, .course-item').forEach(item => {
@@ -1429,7 +1483,7 @@
         });
 
         // ========================================
-        // 9. SUSCRIPCIÓN
+        // 10. SUSCRIPCIÓN
         // ========================================
 
         document.getElementById('btnSubscribe').addEventListener('click', function() {
