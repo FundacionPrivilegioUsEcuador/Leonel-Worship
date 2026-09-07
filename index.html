@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Leonel Worship - App</title>
+    <style>
+        /* ===== RESET Y ESTILOS GLOBALES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #0a0a0f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+        }
+
+        /* ===== CONTENEDOR PRINCIPAL ===== */
+        .app-container {
+            max-width: 400px;
+            width: 100%;
+            background: #12121a;
+            border-radius: 32px;
+            padding: 20px 16px 80px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            border: 1px solid #2a2a35;
+            position: relative;
+            min-height: 700px;
+        }
+
+        /* ===== BARRA DE ESTADO ===== */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 12px;
+            padding-bottom: 12px;
+        }
+
+        /* ===== SLIDER / BANNER ===== */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 18px;
+            aspect-ratio: 16 / 7;
+            background: #1a1a26;
+        }
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+
+        .slider-slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .slider-slide .slide-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .slider-slide .slide-content {
+            position: relative;
+            z-index: 1;
+            color: #fff;
+        }
+
+        .slider-slide .slide-content h2 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .slider-slide .slide-content p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 4px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Slide 1 - Fondo dorado con textura */
+        .slide-1 .slide-bg {
+            background: linear-gradient(135deg, #f7971e, #ffd700);
+        }
+        .slide-1 .slide-content h2 {
+            color: #1a1a1a;
+        }
+        .slide-1 .slide-content p {
+            color: #1a1a1a;
+            opacity: 0.8;
+        }
+
+        /* Slide 2 - Fondo oscuro con acento dorado */
+        .slide-2 .slide-bg {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+        }
+        .slide-2 .slide-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 70% 30%, rgba(255, 215, 0, 0.15), transparent 60%);
+        }
+        .slide-2 .slide-content h2 {
+            color: #ffd700;
+        }
+        .slide-2 .slide-content p {
+            color: #ccc;
+        }
+
+        /* ===== INDICADORES DEL SLIDER ===== */
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            margin-bottom: 14px;
+        }
+
+        .slider-dots .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #2a2a3a;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+            padding: 0;
+        }
+
+        .slider-dots .dot.active {
+            background: #ffd700;
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        /* ===== PERFIL DEL ARTISTA ===== */
+        .artist-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+
+        .artist-info h2 {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .artist-info p {
+            color: #888;
+            font-size: 13px;
+        }
+
+        .badge-pro {
+            background: #f7971e;
+            color: #000;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 4px;
+        }
+
+        /* ===== TARJETA DE SUSCRIPCIÓN ===== */
+        .subscribe-card {
+            background: linear-gradient(145deg, #1e1e2a, #28283a);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 24px;
+            border: 1px solid #3a3a4e;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subscribe-card .text {
+            color: #fff;
+        }
+
+        .subscribe-card .text .price {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffd700;
+        }
+
+        .subscribe-card .text .price span {
+            font-size: 14px;
+            font-weight: 400;
+            color: #aaa;
+        }
+
+        .subscribe-card .text small {
+            color: #aaa;
+            font-size: 12px;
+            display: block;
+        }
+
+        .btn-subscribe {
+            background: #ffd700;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            color: #0b0b0f;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-subscribe:hover {
+            transform: scale(1.04);
+            box-shadow: 0 6px 28px rgba(255, 215, 0, 0.5);
+        }
+
+        .btn-subscribe:active {
+            transform: scale(0.96);
+        }
+
+        /* ===== NAVEGACIÓN SUPERIOR ===== */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            background: #1a1a26;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: #888;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active {
+            background: #ffd700;
+            color: #0a0a0f;
+            font-weight: 600;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+        }
+
+        .tab-btn.active:hover {
+            color: #0a0a0f;
+        }
+
+        /* ===== PÁGINAS ===== */
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== SECCIÓN TÍTULOS ===== */
+        .section-title {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .section-title a {
+            color: #f7971e;
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .section-subtitle {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+
+        /* ===== PÁGINA INICIO ===== */
+        .song-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .song-item {
+            background: #1a1a26;
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 4px solid #f7971e;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .song-item:hover {
+            background: #222232;
+        }
+
+        .song-item .cover {
+            width: 44px;
+            height: 44px;
+            background: #2e2e40;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            color: #888;
+        }
+
+        .song-item .info {
+            flex: 1;
+        }
+
+        .song-item .info h4 {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .song-item .info p {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .song-item .icon-play {
+            color: #ffd700;
+            font-size: 20px;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .course-card {
+            background: #1a1a26;
+            border-radius: 14px;
+            padding: 14px 10px;
+            text-align: center;
+            border: 1px solid #2a2a3a;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .course-card:hover {
+            border-color: #f7971e;
+        }
+
+        .course-card .icon {
+            font-size: 28px;
+            margin-bottom: 6px;
+            color: #888;
+        }
+
+        .course-card h5 {
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .course-card p {
+            color: #888;
+            font-size: 11px;
+        }
+
+        .course-card .lock {
+            color: #ffd700;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .concert-item {
+            background: #1a1a26;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .concert-item .info h4 {
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .concert-item .info p {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .concert-item .date {
+            background: #2a2a3e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: #ffd700;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* ===== PÁGINA MÚSICA ===== */
+        .song-list-full .song-item {
+            border-left-color: #555;
+        }
+
+        .song-list-full .song-item .song-number {
+            color: #555;
+            font-size: 13px;
+            font-weight: 500;
+            min-width: 28px;
+        }
+
+        .song-list-full .song-item .duration {
+            color: #555;
+            font-size: 12px;
+        }
+
+        .song-list-full .song-item.featured {
+            border-left-color: #ffd700;
+            background: #1f1f2e;
+        }
+
+        .badge-new {
+            background: #ffd700;
+            color: #0a0a0f;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-left: 8px;
+            text-transform: uppercase;
+        }
+
+        /* ===== PÁGINA CURSOS ===== */
+        .course-list-full .course-item {
+            background: #1a1a26;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .course-list-full .course-item:hover {
+            border-color: #2a2a40;
+        }
+
+        .course-list-full .course-icon {
+            width: 48px;
+            height: 48px;
+            background: #25253a;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            color: #888;
+        }
+
+        .course-list-full .course-info {
+            flex: 1;
+        }
+
+        .course-list-full .course-info h4 {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .course-list-full .course-info p {
+            color: #777;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .course-list-full .course-status {
+            font-size: 12px;
+            color: #ffd700;
+            font-weight: 500;
+        }
+
+        .course-list-full .course-status.locked {
+            color: #555;
+        }
+
+        .course-list-full .course-progress {
+            width: 100%;
+            height: 3px;
+            background: #2a2a3a;
+            border-radius: 10px;
+            margin-top: 6px;
+        }
+
+        .course-list-full .course-progress .bar {
+            height: 100%;
+            background: #ffd700;
+            border-radius: 10px;
+            width: 0%;
+        }
+
+        /* ===== MENÚ INFERIOR ===== */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0f0f18;
+            border-top: 1px solid #1a1a26;
+            padding: 10px 20px 14px;
+            border-radius: 0 0 32px 32px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            color: #555;
+            font-size: 11px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 4px 12px;
+            border-radius: 8px;
+            background: transparent;
+            border: none;
+        }
+
+        .nav-item.active {
+            color: #ffd700;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            color: #fff;
+        }
+
+        .nav-item .label {
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* ===== POPUP DE REGISTRO ===== */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .overlay.active {
+            display: flex;
+        }
+
+        .popup {
+            background: #12121a;
+            border-radius: 24px;
+            padding: 32px 28px;
+            max-width: 380px;
+            width: 100%;
+            border: 1px solid #2a2a35;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+            position: relative;
+        }
+
+        .popup .close-btn {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 22px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .popup .close-btn:hover {
+            color: #fff;
+        }
+
+        .popup h2 {
+            color: #fff;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .popup .subtitle {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .popup .form-group {
+            margin-bottom: 16px;
+        }
+
+        .popup .form-group label {
+            color: #aaa;
+            font-size: 13px;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .popup .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: #1a1a26;
+            border: 1px solid #2a2a3a;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .popup .form-group input:focus {
+            outline: none;
+            border-color: #ffd700;
+            background: #1f1f2e;
+        }
+
+        .popup .form-group input::placeholder {
+            color: #555;
+        }
+
+        .popup .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: #ffd700;
+            color: #0a0a0f;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 4px;
+        }
+
+        .popup .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .popup .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .popup .auth-divider {
+            text-align: center;
+            color: #555;
+            font-size: 13px;
+            margin: 18px 0;
+            position: relative;
+        }
+
+        .popup .auth-divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 42%;
+            height: 1px;
+            background: #2a2a3a;
+        }
+
+        .popup .auth-divider::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 42%;
+            height: 1px;
+            background: #2a2a3a;
+        }
+
+        .popup .btn-guest {
+            width: 100%;
+            padding: 14px;
+            background: #2a2a3a;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .popup .btn-guest:hover {
+            background: #33334a;
+        }
+
+        .popup .auth-switch {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-top: 16px;
+        }
+
+        .popup .auth-switch a {
+            color: #ffd700;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .popup .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 420px) {
+            .app-container {
+                padding: 16px 12px 70px;
+                border-radius: 24px;
+            }
+            .bottom-nav {
+                padding: 8px 12px 12px;
+                border-radius: 0 0 24px 24px;
+            }
+            .nav-item {
+                font-size: 10px;
+                padding: 4px 8px;
+            }
+            .popup {
+                padding: 24px 18px;
+            }
+            .slider-slide .slide-content h2 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================ -->
+    <!-- APP PRINCIPAL -->
+    <!-- ============================================================ -->
+    <div class="app-container">
+        <!-- BARRA DE ESTADO -->
+        <div class="status-bar">
+            <span>5G</span>
+            <span>9:41</span>
+            <span>87%</span>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- SLIDER / BANNER -->
+        <!-- ============================================================ -->
+        <div class="slider-container" id="sliderContainer">
+            <div class="slider-track" id="sliderTrack">
+                <!-- Slide 1 -->
+                <div class="slider-slide slide-1">
+                    <div class="slide-bg"></div>
+                    <div class="slide-content">
+                        <h2>Leonel Worship</h2>
+                        <p>Nuevo album disponible</p>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="slider-slide slide-2">
+                    <div class="slide-bg"></div>
+                    <div class="slide-content">
+                        <h2>Leonel Worship</h2>
+                        <p>Proximos conciertos 2026</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INDICADORES -->
+        <div class="slider-dots" id="sliderDots">
+            <button class="dot active" data-index="0"></button>
+            <button class="dot" data-index="1"></button>
+        </div>
+
+        <!-- PERFIL DEL ARTISTA -->
+        <div class="artist-header">
+            <div class="avatar">LW</div>
+            <div class="artist-info">
+                <h2>Leonel Worship</h2>
+                <p>25K seguidores</p>
+                <span class="badge-pro">PRO</span>
+            </div>
+        </div>
+
+        <!-- TARJETA DE SUSCRIPCIÓN -->
+        <div class="subscribe-card">
+            <div class="text">
+                <div class="price">$3 <span>/ mes</span></div>
+                <small>Acceso a toda la musica + cursos</small>
+            </div>
+            <button class="btn-subscribe" id="btnSubscribe">Suscribirme</button>
+        </div>
+
+        <!-- TABS SUPERIORES -->
+        <div class="tabs">
+            <button class="tab-btn active" data-page="inicio">Inicio</button>
+            <button class="tab-btn" data-page="musica">Musica</button>
+            <button class="tab-btn" data-page="cursos">Cursos</button>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- PÁGINA: INICIO -->
+        <!-- ============================================================ -->
+        <div id="page-inicio" class="page active">
+            <div class="section-title">
+                <span>Ultimos lanzamientos</span>
+                <a onclick="navigateTo('musica'); return false;">Ver todos</a>
+            </div>
+
+            <div class="song-list">
+                <div class="song-item">
+                    <div class="cover">🎸</div>
+                    <div class="info">
+                        <h4>Noche de Rock</h4>
+                        <p>Leonel Worship · 2026</p>
+                    </div>
+                    <span class="icon-play">▶</span>
+                </div>
+                <div class="song-item">
+                    <div class="cover">🎹</div>
+                    <div class="info">
+                        <h4>Balada para el alma</h4>
+                        <p>Leonel Worship · 2026</p>
+                    </div>
+                    <span class="icon-play">▶</span>
+                </div>
+                <div class="song-item" style="border-left-color: #888;">
+                    <div class="cover">🎤</div>
+                    <div class="info">
+                        <h4>Acustico en vivo</h4>
+                        <p>Leonel Worship · 2025</p>
+                    </div>
+                    <span class="icon-play">▶</span>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <span>Cursos</span>
+                <a onclick="navigateTo('cursos'); return false;">Ver todos</a>
+            </div>
+
+            <div class="course-grid">
+                <div class="course-card">
+                    <div class="icon">🎸</div>
+                    <h5>Guitarra</h5>
+                    <p>12 lecciones</p>
+                    <div class="lock">🔒</div>
+                </div>
+                <div class="course-card">
+                    <div class="icon">🥁</div>
+                    <h5>Bateria</h5>
+                    <p>8 lecciones</p>
+                    <div class="lock">🔒</div>
+                </div>
+                <div class="course-card">
+                    <div class="icon">🎹</div>
+                    <h5>Piano</h5>
+                    <p>10 lecciones</p>
+                    <div class="lock">🔒</div>
+                </div>
+                <div class="course-card">
+                    <div class="icon">🎤</div>
+                    <h5>Voz</h5>
+                    <p>6 lecciones</p>
+                    <div class="lock">🔒</div>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <span>Proximos conciertos</span>
+            </div>
+
+            <div class="concert-item">
+                <div class="info">
+                    <h4>Festival de Rock</h4>
+                    <p>Madrid, Espana</p>
+                </div>
+                <span class="date">15 May</span>
+            </div>
+
+            <div class="concert-item">
+                <div class="info">
+                    <h4>Noche de Jazz</h4>
+                    <p>Barcelona, Espana</p>
+                </div>
+                <span class="date">28 Jun</span>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- PÁGINA: MÚSICA -->
+        <!-- ============================================================ -->
+        <div id="page-musica" class="page">
+            <div class="section-title">Todas las canciones</div>
+            <div class="section-subtitle">Discografia completa de Leonel Worship</div>
+
+            <div class="song-list-full">
+                <div class="song-item featured">
+                    <span class="song-number">01</span>
+                    <div class="info">
+                        <h4>Noche de Rock <span class="badge-new">Nuevo</span></h4>
+                        <p>Leonel Worship · 2026</p>
+                    </div>
+                    <span class="duration">3:24</span>
+                </div>
+
+                <div class="song-item">
+                    <span class="song-number">02</span>
+                    <div class="info">
+                        <h4>Balada para el alma</h4>
+                        <p>Leonel Worship · 2026</p>
+                    </div>
+                    <span class="duration">4:12</span>
+                </div>
+
+                <div class="song-item">
+                    <span class="song-number">03</span>
+                    <div class="info">
+                        <h4>Acustico en vivo</h4>
+                        <p>Leonel Worship · 2025</p>
+                    </div>
+                    <span class="duration">5:08</span>
+                </div>
+
+                <div class="song-item">
+                    <span class="song-number">04</span>
+                    <div class="info">
+                        <h4>Fuego y Pasion</h4>
+                        <p>Leonel Worship · 2025</p>
+                    </div>
+                    <span class="duration">3:56</span>
+                </div>
+
+                <div class="song-item">
+                    <span class="song-number">05</span>
+                    <div class="info">
+                        <h4>Atardecer</h4>
+                        <p>Leonel Worship · 2025</p>
+                    </div>
+                    <span class="duration">4:45</span>
+                </div>
+
+                <div class="song-item">
+                    <span class="song-number">06</span>
+                    <div class="info">
+                        <h4>Sin mirar atras</h4>
+                        <p>Leonel Worship · 2025</p>
+                    </div>
+                    <span class="duration">3:38</span>
+                </div>
+
+                <div class="song-item">
+                    <span class="song-number">07</span>
+                    <div class="info">
+                        <h4>Luces de ciudad</h4>
+                        <p>Leonel Worship · 2024</p>
+                    </div>
+                    <span class="duration">4:02</span>
+                </div>
+
+                <div class="song-item">
+                    <span class="song-number">08</span>
+                    <div class="info">
+                        <h4>Despertar</h4>
+                        <p>Leonel Worship · 2024</p>
+                    </div>
+                    <span class="duration">3:50</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 16px; padding: 12px; background: #1a1a26; border-radius: 10px; text-align: center;">
+                <span style="color: #666; font-size: 13px;">45 canciones disponibles</span>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- PÁGINA: CURSOS -->
+        <!-- ============================================================ -->
+        <div id="page-cursos" class="page">
+            <div class="section-title">Todos los cursos</div>
+            <div class="section-subtitle">Aprende con Leonel Worship</div>
+
+            <div class="course-list-full">
+                <div class="course-item">
+                    <div class="course-icon">🎸</div>
+                    <div class="course-info">
+                        <h4>Guitarra para principiantes</h4>
+                        <p>12 lecciones · Nivel 1</p>
+                        <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
+                    </div>
+                    <span class="course-status locked">🔒</span>
+                </div>
+
+                <div class="course-item">
+                    <div class="course-icon">🥁</div>
+                    <div class="course-info">
+                        <h4>Bateria: ritmos esenciales</h4>
+                        <p>8 lecciones · Nivel 1</p>
+                        <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
+                    </div>
+                    <span class="course-status locked">🔒</span>
+                </div>
+
+                <div class="course-item">
+                    <div class="course-icon">🎹</div>
+                    <div class="course-info">
+                        <h4>Piano: acordes y melodias</h4>
+                        <p>10 lecciones · Nivel 1</p>
+                        <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
+                    </div>
+                    <span class="course-status locked">🔒</span>
+                </div>
+
+                <div class="course-item">
+                    <div class="course-icon">🎤</div>
+                    <div class="course-info">
+                        <h4>Tecnica vocal avanzada</h4>
+                        <p>6 lecciones · Nivel 2</p>
+                        <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
+                    </div>
+                    <span class="course-status locked">🔒</span>
+                </div>
+
+                <div class="course-item" style="border: 1px solid #2a2a40; background: #1f1f2e;">
+                    <div class="course-icon">🎵</div>
+                    <div class="course-info">
+                        <h4>Composicion musical</h4>
+                        <p>14 lecciones · Nivel 2</p>
+                        <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
+                    </div>
+                    <span class="course-status locked">🔒</span>
+                </div>
+
+                <div class="course-item" style="border: 1px solid #2a2a40; background: #1f1f2e;">
+                    <div class="course-icon">🎧</div>
+                    <div class="course-info">
+                        <h4>Produccion musical</h4>
+                        <p>10 lecciones · Nivel 2</p>
+                        <div class="course-progress"><div class="bar" style="width: 0%;"></div></div>
+                    </div>
+                    <span class="course-status locked">🔒</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 16px; padding: 14px; background: #1a1a26; border-radius: 10px; text-align: center; border: 1px dashed #2a2a40;">
+                <span style="color: #ffd700; font-size: 14px; font-weight: 500;">Suscribete por $3/mes</span>
+                <span style="color: #666; font-size: 12px; display: block; margin-top: 4px;">Desbloquea todos los cursos</span>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- MENÚ INFERIOR -->
+        <!-- ============================================================ -->
+        <div class="bottom-nav">
+            <button class="nav-item active" data-page="inicio">
+                <span class="label">Inicio</span>
+            </button>
+            <button class="nav-item" data-page="musica">
+                <span class="label">Musica</span>
+            </button>
+            <button class="nav-item" data-page="cursos">
+                <span class="label">Cursos</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- POPUP DE REGISTRO -->
+    <!-- ============================================================ -->
+    <div class="overlay" id="registerOverlay">
+        <div class="popup">
+            <button class="close-btn" id="closePopup">✕</button>
+
+            <h2>Bienvenido</h2>
+            <p class="subtitle">Registrate para acceder a toda la musica y cursos</p>
+
+            <!-- Formulario de Registro -->
+            <div id="form-register">
+                <div class="form-group">
+                    <label>Nombre completo</label>
+                    <input type="text" placeholder="Ej: Carlos Perez" id="fullname" />
+                </div>
+                <div class="form-group">
+                    <label>Correo electronico</label>
+                    <input type="email" placeholder="tu@email.com" id="email" />
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" placeholder="Minimo 6 caracteres" id="password" />
+                </div>
+                <button class="btn-primary" id="btnRegister">Crear cuenta</button>
+
+                <div class="auth-divider">o</div>
+
+                <button class="btn-guest" id="btnGuest">Entrar como invitado</button>
+
+                <div class="auth-switch">
+                    ¿Ya tienes cuenta? <a id="switchToLogin">Inicia sesion</a>
+                </div>
+            </div>
+
+            <!-- Formulario de Login (oculto) -->
+            <div id="form-login" style="display: none;">
+                <div class="form-group">
+                    <label>Correo electronico</label>
+                    <input type="email" placeholder="tu@email.com" id="loginEmail" />
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" placeholder="Tu contraseña" id="loginPassword" />
+                </div>
+                <button class="btn-primary" id="btnLogin">Iniciar sesion</button>
+
+                <div class="auth-divider">o</div>
+
+                <button class="btn-guest" id="btnGuest2">Entrar como invitado</button>
+
+                <div class="auth-switch">
+                    ¿No tienes cuenta? <a id="switchToRegister">Registrate</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================================================ -->
+    <script>
+        // ========================================
+        // 1. SLIDER AUTOMÁTICO
+        // ========================================
+
+        let currentSlide = 0;
+        const totalSlides = 2;
+        const sliderTrack = document.getElementById('sliderTrack');
+        const dots = document.querySelectorAll('.dot');
+        let autoSlideInterval;
+
+        function goToSlide(index) {
+            if (index < 0) index = totalSlides - 1;
+            if (index >= totalSlides) index = 0;
+            currentSlide = index;
+            sliderTrack.style.transform = 'translateX(-' + (index * 100) + '%)';
+
+            // Actualizar dots
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        function nextSlide() {
+            goToSlide(currentSlide + 1);
+        }
+
+        // Click en dots
+        dots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                const index = parseInt(this.dataset.index);
+                goToSlide(index);
+                resetAutoSlide();
+            });
+        });
+
+        // Auto-slide cada 4 segundos
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(nextSlide, 4000);
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            startAutoSlide();
+        }
+
+        // Iniciar slider
+        startAutoSlide();
+
+        // ========================================
+        // 2. NAVEGACIÓN ENTRE PÁGINAS
+        // ========================================
+
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            const targetPage = document.getElementById('page-' + pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.page === pageId);
+            });
+
+            document.querySelectorAll('.nav-item').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.page === pageId);
+            });
+        }
+
+        document.querySelectorAll('.tab-btn, .nav-item').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const page = this.dataset.page;
+                if (page) {
+                    navigateTo(page);
+                }
+            });
+        });
+
+        // ========================================
+        // 3. POPUP DE REGISTRO
+        // ========================================
+
+        const overlay = document.getElementById('registerOverlay');
+        const closePopup = document.getElementById('closePopup');
+        let isLoggedIn = false;
+
+        window.addEventListener('load', function() {
+            if (!isLoggedIn) {
+                overlay.classList.add('active');
+            }
+        });
+
+        closePopup.addEventListener('click', function() {
+            overlay.classList.remove('active');
+        });
+
+        overlay.addEventListener('click', function(e) {
+            if (e.target === this) {
+                overlay.classList.remove('active');
+            }
+        });
+
+        // ========================================
+        // 4. REGISTRO / LOGIN - SWITCH
+        // ========================================
+
+        const formRegister = document.getElementById('form-register');
+        const formLogin = document.getElementById('form-login');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const switchToRegister = document.getElementById('switchToRegister');
+
+        switchToLogin.addEventListener('click', function(e) {
+            e.preventDefault();
+            formRegister.style.display = 'none';
+            formLogin.style.display = 'block';
+        });
+
+        switchToRegister.addEventListener('click', function(e) {
+            e.preventDefault();
+            formLogin.style.display = 'none';
+            formRegister.style.display = 'block';
+        });
+
+        // ========================================
+        // 5. ACCIONES DE REGISTRO Y LOGIN
+        // ========================================
+
+        document.getElementById('btnRegister').addEventListener('click', function() {
+            const name = document.getElementById('fullname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!name || !email || !password) {
+                alert('Por favor, completa todos los campos.');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('La contraseña debe tener al menos 6 caracteres.');
+                return;
+            }
+
+            alert('¡Cuenta creada con exito! Bienvenido, ' + name);
+            isLoggedIn = true;
+            overlay.classList.remove('active');
+            actualizarUsuario(name);
+        });
+
+        document.getElementById('btnLogin').addEventListener('click', function() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            if (!email || !password) {
+                alert('Por favor, completa todos los campos.');
+                return;
+            }
+
+            alert('¡Sesion iniciada! Bienvenido de vuelta.');
+            isLoggedIn = true;
+            overlay.classList.remove('active');
+            actualizarUsuario(email.split('@')[0]);
+        });
+
+        document.querySelectorAll('#btnGuest, #btnGuest2').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('Entrando como invitado. Para acceder a todo el contenido necesitas suscribirte.');
+                isLoggedIn = true;
+                overlay.classList.remove('active');
+                actualizarUsuario('Invitado');
+            });
+        });
+
+        // ========================================
+        // 6. ACTUALIZAR INTERFAZ CON USUARIO
+        // ========================================
+
+        function actualizarUsuario(nombre) {
+            const artistName = document.querySelector('.artist-info h2');
+            if (artistName) {
+                artistName.textContent = nombre;
+            }
+            const avatar = document.querySelector('.avatar');
+            if (avatar && nombre.length > 0) {
+                const initials = nombre.split(' ').map(w => w[0]).join('').toUpperCase().substring(0, 2);
+                avatar.textContent = initials || 'U';
+            }
+        }
+
+        // ========================================
+        // 7. INTERACCIÓN: CANCIONES
+        // ========================================
+
+        document.querySelectorAll('.song-item').forEach((item) => {
+            item.addEventListener('click', function() {
+                const title = this.querySelector('h4').textContent.trim();
+                const cleanTitle = title.replace(/Nuevo/g, '').trim();
+                alert('Reproduciendo: "' + cleanTitle + '"');
+            });
+        });
+
+        // ========================================
+        // 8. INTERACCIÓN: CURSOS
+        // ========================================
+
+        document.querySelectorAll('.course-card, .course-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const title = this.querySelector('h4')?.textContent || this.querySelector('h5')?.textContent || 'Curso';
+                const hasLock = this.querySelector('.lock, .course-status.locked');
+
+                if (hasLock) {
+                    alert('Curso "' + title + '" bloqueado. Suscribete por $3/mes para acceder a todos los cursos.');
+                } else {
+                    alert('Abriendo curso: "' + title + '"');
+                }
+            });
+        });
+
+        // ========================================
+        // 9. SUSCRIPCIÓN
+        // ========================================
+
+        document.getElementById('btnSubscribe').addEventListener('click', function() {
+            alert('Suscripcion: $3/mes\n\nAccede a:\n- Toda la musica\n- Todos los cursos\n- Contenido exclusivo\n\n¿Deseas continuar?');
+        });
+
+        document.querySelectorAll('.course-status.locked, [style*="Suscribete por"]').forEach(el => {
+            el.addEventListener('click', function(e) {
+                e.stopPropagation();
+                alert('Suscripcion: $3/mes\n\nAccede a:\n- Toda la musica\n- Todos los cursos\n- Contenido exclusivo');
+            });
+        });
+    </script>
+
+</body>
+</html>
