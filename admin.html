@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Panel Admin - Leonel Worship</title>
+
+    <!-- ===== FIREBASE SDKs ===== -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #0a0a0f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .admin-container {
+            max-width: 500px;
+            width: 100%;
+            background: #12121a;
+            border-radius: 24px;
+            padding: 30px 24px;
+            border: 1px solid #2a2a35;
+        }
+
+        .admin-container h1 {
+            color: #ffd700;
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .admin-container .subtitle {
+            color: #888;
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        #adminLogin { display: block; }
+        #adminLogin.hidden { display: none; }
+
+        #adminLogin .form-group { margin-bottom: 16px; }
+        #adminLogin .form-group label {
+            color: #aaa;
+            font-size: 13px;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 6px;
+        }
+        #adminLogin .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: #1a1a26;
+            border: 1px solid #2a2a3a;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 15px;
+        }
+        #adminLogin .form-group input:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: #ffd700;
+            color: #0a0a0f;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-login:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+        }
+        .btn-login:active { transform: scale(0.98); }
+
+        .error-msg {
+            color: #ef5350;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 12px;
+            display: none;
+        }
+        .error-msg.show { display: block; }
+
+        #adminPanel { display: none; }
+        #adminPanel.active { display: block; }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .admin-header h2 { color: #fff; font-size: 18px; }
+        .admin-header .btn-logout {
+            background: #4a2a2a;
+            color: #ef5350;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .admin-header .btn-logout:hover { background: #5a3a3a; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: #1a1a26;
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+            border: 1px solid #2a2a3a;
+        }
+        .stat-card .number { color: #ffd700; font-size: 24px; font-weight: 700; }
+        .stat-card .label { color: #888; font-size: 11px; margin-top: 4px; }
+
+        .admin-section { margin-bottom: 20px; }
+        .admin-section h3 { color: #fff; font-size: 16px; margin-bottom: 12px; }
+        .admin-section .form-group { margin-bottom: 12px; }
+        .admin-section .form-group label {
+            color: #aaa;
+            font-size: 12px;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .admin-section .form-group input,
+        .admin-section .form-group select,
+        .admin-section .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            background: #1a1a26;
+            border: 1px solid #2a2a3a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+        }
+        .admin-section .form-group input:focus,
+        .admin-section .form-group select:focus,
+        .admin-section .form-group textarea:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+        .admin-section .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .admin-section .form-group select option { background: #12121a; }
+
+        .btn-save {
+            background: #ffd700;
+            color: #0a0a0f;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+        }
+        .btn-save:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+        }
+        .btn-save:active { transform: scale(0.98); }
+
+        .btn-danger {
+            background: #4a2a2a;
+            color: #ef5350;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+            margin-top: 8px;
+        }
+        .btn-danger:hover { background: #5a3a3a; }
+
+        .success-msg {
+            color: #81c784;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+        .success-msg.show { display: block; }
+
+        .item-list {
+            background: #1a1a26;
+            border-radius: 8px;
+            padding: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .item-list .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            border-bottom: 1px solid #2a2a3a;
+            color: #ccc;
+            font-size: 13px;
+        }
+        .item-list .item:last-child { border-bottom: none; }
+        .item-list .item .delete-btn {
+            background: #4a2a2a;
+            color: #ef5350;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .item-list .item .delete-btn:hover { background: #5a3a3a; }
+
+        .admin-section .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        @media (max-width: 420px) {
+            .stats { grid-template-columns: 1fr 1fr; }
+            .admin-section .row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-container">
+
+        <h1>🔑 Panel Admin</h1>
+        <p class="subtitle">Gestiona el contenido de Leonel Worship</p>
+
+        <!-- ===== LOGIN ===== -->
+        <div id="adminLogin">
+            <div class="form-group">
+                <label>Usuario</label>
+                <input type="text" id="adminUser" value="Admin" />
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="adminPass" placeholder="Ingresa tu contraseña" />
+            </div>
+            <button class="btn-login" id="btnAdminLogin">Acceder al Panel</button>
+            <div class="error-msg" id="loginError">❌ Usuario o contraseña incorrectos</div>
+        </div>
+
+        <!-- ===== PANEL ===== -->
+        <div id="adminPanel">
+
+            <div class="admin-header">
+                <h2>📊 Panel de Control</h2>
+                <button class="btn-logout" id="btnAdminLogout">Cerrar</button>
+            </div>
+
+            <!-- Estadísticas -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="number" id="statSongs">0</div>
+                    <div class="label">Canciones</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="statVideos">0</div>
+                    <div class="label">Videos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="statAlbums">0</div>
+                    <div class="label">Álbumes</div>
+                </div>
+            </div>
+
+            <!-- Agregar Canción -->
+            <div class="admin-section">
+                <h3>➕ Agregar Canción</h3>
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" id="songTitle" placeholder="Nombre de la canción" />
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>Álbum</label>
+                        <select id="songAlbum">
+                            <option value="0">Rock Worship</option>
+                            <option value="1">Baladas del Alma</option>
+                            <option value="2">En Vivo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Duración</label>
+                        <input type="text" id="songDuration" placeholder="3:30" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>URL del audio (MP3)</label>
+                    <input type="text" id="songUrl" placeholder="https://ejemplo.com/cancion.mp3" />
+                </div>
+                <button class="btn-save" id="btnAddSong">Agregar Canción</button>
+                <div class="success-msg" id="songSuccess">✅ Canción agregada correctamente</div>
+            </div>
+
+            <hr style="border-color:#2a2a3a; margin:16px 0;" />
+
+            <!-- Agregar Video -->
+            <div class="admin-section">
+                <h3>➕ Agregar Video</h3>
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" id="videoTitle" placeholder="Título del video" />
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <input type="text" id="videoDesc" placeholder="Breve descripción" />
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select id="videoCategory">
+                            <option value="Guitarra">Guitarra</option>
+                            <option value="Bateria">Batería</option>
+                            <option value="Piano">Piano</option>
+                            <option value="Voz">Voz</option>
+                            <option value="Composicion">Composición</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Duración</label>
+                        <input type="text" id="videoDuration" placeholder="12:30" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>URL del video (MP4)</label>
+                    <input type="text" id="videoUrl" placeholder="https://ejemplo.com/video.mp4" />
+                </div>
+                <button class="btn-save" id="btnAddVideo">Agregar Video</button>
+                <div class="success-msg" id="videoSuccess">✅ Video agregado correctamente</div>
+            </div>
+
+            <hr style="border-color:#2a2a3a; margin:16px 0;" />
+
+            <!-- Lista de Contenido -->
+            <div class="admin-section">
+                <h3>📋 Contenido Actual</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div>
+                        <p style="color:#888; font-size:12px; margin-bottom:6px;">🎵 Canciones</p>
+                        <div class="item-list" id="songList">
+                            <div class="item">Cargando...</div>
+                        </div>
+                    </div>
+                    <div>
+                        <p style="color:#888; font-size:12px; margin-bottom:6px;">🎬 Videos</p>
+                        <div class="item-list" id="videoList">
+                            <div class="item">Cargando...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // ================================================================
+        // 1. CONFIGURACIÓN DE FIREBASE (CON TUS CREDENCIALES)
+        // ================================================================
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCrfSDDBwAgYJtxmXsWGkyKIoDG2wNiS4E",
+            authDomain: "leonelworshipapp.firebaseapp.com",
+            projectId: "leonelworshipapp",
+            storageBucket: "leonelworshipapp.firebasestorage.app",
+            messagingSenderId: "447545667318",
+            appId: "1:447545667318:web:146def9764a49a640b06d7",
+            measurementId: "G-MXH48H73GH"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // ================================================================
+        // 2. DATOS INICIALES DE EJEMPLO
+        // ================================================================
+
+        const albumNames = ['Rock Worship', 'Baladas del Alma', 'En Vivo'];
+
+        function inicializarDatosSiVacio() {
+            database.ref('songs').once('value')
+                .then((snapshot) => {
+                    if (!snapshot.exists()) {
+                        const songsData = [
+                            { id: 0, title: 'Noche de Rock', album: 0, duration: '3:24', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
+                            { id: 1, title: 'Fuego y Pasion', album: 0, duration: '3:56', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
+                            { id: 2, title: 'Sin mirar atras', album: 0, duration: '3:38', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3' },
+                            { id: 3, title: 'Balada para el alma', album: 1, duration: '4:12', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
+                            { id: 4, title: 'Atardecer', album: 1, duration: '4:45', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' },
+                            { id: 5, title: 'Luces de ciudad', album: 1, duration: '4:02', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3' },
+                            { id: 6, title: 'Acustico en vivo', album: 2, duration: '5:08', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
+                            { id: 7, title: 'Despertar', album: 2, duration: '3:50', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3' }
+                        ];
+
+                        const videosData = [
+                            { id: 0, title: 'Clase de Guitarra - Acordes básicos', description: 'Aprende los acordes fundamentales para guitarra', category: 'Guitarra', duration: '12:30', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+                            { id: 1, title: 'Técnica de Batería - Ritmos esenciales', description: 'Domina los ritmos básicos de batería', category: 'Bateria', duration: '15:20', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+                            { id: 2, title: 'Piano - Escalas y melodías', description: 'Introducción a las escalas mayores y menores', category: 'Piano', duration: '18:45', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+                            { id: 3, title: 'Técnica Vocal - Respiración y proyección', description: 'Ejercicios para mejorar tu voz', category: 'Voz', duration: '14:10', url: 'https://www.w3schools.com/html/mov_bbb.mp4' }
+                        ];
+
+                        songsData.forEach(song => {
+                            database.ref('songs/' + song.id).set(song);
+                        });
+                        videosData.forEach(video => {
+                            database.ref('videos/' + video.id).set(video);
+                        });
+                    }
+                });
+        }
+
+        // ================================================================
+        // 3. CARGAR Y MOSTRAR DATOS
+        // ================================================================
+
+        function actualizarEstadisticas() {
+            database.ref('songs').once('value')
+                .then((snapshot) => {
+                    const songs = snapshot.val();
+                    const count = songs ? Object.keys(songs).length : 0;
+                    document.getElementById('statSongs').textContent = count;
+
+                    if (songs) {
+                        const albums = new Set(Object.values(songs).map(s => s.album));
+                        document.getElementById('statAlbums').textContent = albums.size;
+                    } else {
+                        document.getElementById('statAlbums').textContent = '0';
+                    }
+                });
+
+            database.ref('videos').once('value')
+                .then((snapshot) => {
+                    const videos = snapshot.val();
+                    document.getElementById('statVideos').textContent = videos ? Object.keys(videos).length : 0;
+                });
+        }
+
+        function actualizarListas() {
+            database.ref('songs').once('value')
+                .then((snapshot) => {
+                    const songs = snapshot.val();
+                    const list = document.getElementById('songList');
+                    if (!songs || Object.keys(songs).length === 0) {
+                        list.innerHTML = '<div class="item" style="color:#555;">No hay canciones</div>';
+                        return;
+                    }
+                    let html = '';
+                    Object.values(songs).forEach(s => {
+                        html += `
+                            <div class="item">
+                                <span>${s.title} <span style="color:#555;font-size:11px;">(${albumNames[s.album] || 'Álbum'})</span></span>
+                                <button class="delete-btn" onclick="eliminarCancion(${s.id})">Eliminar</button>
+                            </div>
+                        `;
+                    });
+                    list.innerHTML = html;
+                });
+
+            database.ref('videos').once('value')
+                .then((snapshot) => {
+                    const videos = snapshot.val();
+                    const list = document.getElementById('videoList');
+                    if (!videos || Object.keys(videos).length === 0) {
+                        list.innerHTML = '<div class="item" style="color:#555;">No hay videos</div>';
+                        return;
+                    }
+                    let html = '';
+                    Object.values(videos).forEach(v => {
+                        html += `
+                            <div class="item">
+                                <span>${v.title} <span style="color:#555;font-size:11px;">(${v.category})</span></span>
+                                <button class="delete-btn" onclick="eliminarVideo(${v.id})">Eliminar</button>
+                            </div>
+                        `;
+                    });
+                    list.innerHTML = html;
+                });
+        }
+
+        // ================================================================
+        // 4. ELIMINAR
+        // ================================================================
+
+        function eliminarCancion(id) {
+            if (confirm('¿Eliminar esta canción?')) {
+                database.ref('songs/' + id).remove()
+                    .then(() => {
+                        actualizarEstadisticas();
+                        actualizarListas();
+                        mostrarExito('songSuccess');
+                    });
+            }
+        }
+
+        function eliminarVideo(id) {
+            if (confirm('¿Eliminar este video?')) {
+                database.ref('videos/' + id).remove()
+                    .then(() => {
+                        actualizarEstadisticas();
+                        actualizarListas();
+                        mostrarExito('videoSuccess');
+                    });
+            }
+        }
+
+        // ================================================================
+        // 5. AGREGAR
+        // ================================================================
+
+        document.getElementById('btnAddSong').addEventListener('click', function() {
+            const title = document.getElementById('songTitle').value.trim();
+            const album = parseInt(document.getElementById('songAlbum').value);
+            const duration = document.getElementById('songDuration').value.trim();
+            const url = document.getElementById('songUrl').value.trim();
+
+            if (!title || !duration || !url) {
+                alert('Completa todos los campos');
+                return;
+            }
+
+            database.ref('songs').once('value')
+                .then((snapshot) => {
+                    const songs = snapshot.val();
+                    let newId = 0;
+                    if (songs) {
+                        const ids = Object.keys(songs).map(Number);
+                        newId = Math.max(...ids) + 1;
+                    }
+
+                    const newSong = { id: newId, title, album, duration, url };
+                    database.ref('songs/' + newId).set(newSong)
+                        .then(() => {
+                            document.getElementById('songTitle').value = '';
+                            document.getElementById('songDuration').value = '';
+                            document.getElementById('songUrl').value = '';
+                            actualizarEstadisticas();
+                            actualizarListas();
+                            mostrarExito('songSuccess');
+                        });
+                });
+        });
+
+        document.getElementById('btnAddVideo').addEventListener('click', function() {
+            const title = document.getElementById('videoTitle').value.trim();
+            const description = document.getElementById('videoDesc').value.trim();
+            const category = document.getElementById('videoCategory').value;
+            const duration = document.getElementById('videoDuration').value.trim();
+            const url = document.getElementById('videoUrl').value.trim();
+
+            if (!title || !description || !duration || !url) {
+                alert('Completa todos los campos');
+                return;
+            }
+
+            database.ref('videos').once('value')
+                .then((snapshot) => {
+                    const videos = snapshot.val();
+                    let newId = 0;
+                    if (videos) {
+                        const ids = Object.keys(videos).map(Number);
+                        newId = Math.max(...ids) + 1;
+                    }
+
+                    const newVideo = { id: newId, title, description, category, duration, url };
+                    database.ref('videos/' + newId).set(newVideo)
+                        .then(() => {
+                            document.getElementById('videoTitle').value = '';
+                            document.getElementById('videoDesc').value = '';
+                            document.getElementById('videoDuration').value = '';
+                            document.getElementById('videoUrl').value = '';
+                            actualizarEstadisticas();
+                            actualizarListas();
+                            mostrarExito('videoSuccess');
+                        });
+                });
+        });
+
+        function mostrarExito(id) {
+            const el = document.getElementById(id);
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 3000);
+        }
+
+        // ================================================================
+        // 6. LOGIN / LOGOUT
+        // ================================================================
+
+        const ADMIN_USER = 'Admin';
+        const ADMIN_PASS = '123456';
+        let isAdminLogged = false;
+
+        document.getElementById('btnAdminLogin').addEventListener('click', function() {
+            const user = document.getElementById('adminUser').value.trim();
+            const pass = document.getElementById('adminPass').value.trim();
+
+            if (user === ADMIN_USER && pass === ADMIN_PASS) {
+                isAdminLogged = true;
+                document.getElementById('adminLogin').classList.add('hidden');
+                document.getElementById('adminPanel').classList.add('active');
+                document.getElementById('loginError').classList.remove('show');
+                inicializarDatosSiVacio();
+                actualizarEstadisticas();
+                actualizarListas();
+            } else {
+                document.getElementById('loginError').classList.add('show');
+                setTimeout(() => document.getElementById('loginError').classList.remove('show'), 3000);
+            }
+        });
+
+        document.getElementById('btnAdminLogout').addEventListener('click', function() {
+            isAdminLogged = false;
+            document.getElementById('adminLogin').classList.remove('hidden');
+            document.getElementById('adminPanel').classList.remove('active');
+            document.getElementById('adminPass').value = '';
+        });
+
+        document.getElementById('adminPass').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('btnAdminLogin').click();
+        });
+
+        // ================================================================
+        // 7. ESCUCHAR CAMBIOS EN TIEMPO REAL
+        // ================================================================
+
+        database.ref('songs').on('value', () => {
+            if (isAdminLogged) {
+                actualizarEstadisticas();
+                actualizarListas();
+            }
+        });
+
+        database.ref('videos').on('value', () => {
+            if (isAdminLogged) {
+                actualizarEstadisticas();
+                actualizarListas();
+            }
+        });
+    </script>
+
+</body>
+</html>
